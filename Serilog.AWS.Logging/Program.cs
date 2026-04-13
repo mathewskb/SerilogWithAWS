@@ -1,3 +1,4 @@
+using Amazon.SecretsManager;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Add default AWS options
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+
+// Register Secrets Manager
+builder.Services.AddAWSService<IAmazonSecretsManager>();
 
 // logging with serilog and AWS CloudWatch
 builder.Host.UseSerilog((_, loggerConfig) =>
