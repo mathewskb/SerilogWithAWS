@@ -2,7 +2,7 @@ using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Serilog.AWS.Logging.Properties
+namespace Serilog.AWS.Logging.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -10,6 +10,7 @@ namespace Serilog.AWS.Logging.Properties
          IConfiguration _config, ILogger<AWSSecretController> _logger) : ControllerBase
     {
 
+        [HttpGet]
         public async Task<IActionResult> GetSecretAsync()
         {
 
@@ -34,7 +35,7 @@ namespace Serilog.AWS.Logging.Properties
                 return Ok(response.SecretString);
             }
 
-            return Ok("Secret key not found from AWS Secrets Manager");
+            return NotFound("Secret key not found from AWS Secrets Manager");
         }
 
     }

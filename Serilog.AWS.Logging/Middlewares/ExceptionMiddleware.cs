@@ -4,7 +4,7 @@ using Serilog.AWS.Logging.Errors;
 
 namespace Serilog.AWS.Logging.Middlewares;
 
-public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger,
+public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> _logger,
         IHostEnvironment env)
 {
 public async Task InvokeAsync(HttpContext context)
@@ -15,7 +15,7 @@ public async Task InvokeAsync(HttpContext context)
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "{message}", ex.Message);
+            _logger.LogError(ex, "{message}", ex.Message);
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -30,6 +30,8 @@ public async Task InvokeAsync(HttpContext context)
             };
 
             var json = JsonSerializer.Serialize(response, options);
+
+            _logger.LogError("An error occurred: {message}", json);
 
             await context.Response.WriteAsync(json);
         }

@@ -1,4 +1,5 @@
 using Amazon.SecretsManager;
+using Scalar.AspNetCore;
 using Serilog;
 using Serilog.AWS.Logging.Middlewares;
 
@@ -28,6 +29,7 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 if (app.Environment.IsDevelopment())
 {
+    app.MapScalarApiReference();
     app.MapOpenApi();
 }
 
